@@ -1,30 +1,31 @@
 package main
 
 import (
+	    "encoding/json"  
 	"fmt"
 	"net/http"
 )
 
 type User struct{
-	Id int
-	Name string
-	Age int
-	Email string
+	Id int `json:"id"`
+	Name string `json:"name"`
+	Age int `json:"age"`
+	Email string `json:"email"`
 }
 
 	var user = []User{
 		{
-			id: 1,
-			name: "Shuvo Chakrabrati",
-			age: 24,
-			email: "shuvo@gmail.com"
+			Id: 1,
+			Name: "Shuvo Chakrabrati",
+			Age: 24,
+			Email: "shuvo@gmail.com",
 		},
 		{
-			id: 2,
-			name: "Habib Ullah",
-			age: 24,
-			email: "habib@gmail.com"
-		}
+			Id: 2,
+			Name: "Habib Ullah",
+			Age: 24,
+			Email: "habib@gmail.com",
+		},
 	}
 
 func main() {
@@ -57,11 +58,22 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintln(w, "Method not allowed")
 	// 	return
 	// }
-	fmt.Fprintln(w, "User created successfully!")
+	// fmt.Fprintln(w, "User created successfully!")
+
+	var newUser User
+	json.NewDecoder(r.Body).Decode(&newUser)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.FPrintln(w, "Error decoding user", err)
+		return
+	}
 }
 
 func getUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-users, _:=	json.Marshal(user)
-w.Write(users)
+// users, _:=	json.Marshal(user)
+// w.Write(users)
+
+json.NewEncoder(w).encoder.Encode(user)
+
 }
