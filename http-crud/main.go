@@ -33,6 +33,7 @@ func main() {
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/health", healthHandler)
 	mux.HandleFunc("POST /createUser", createUserHandler)
+	mux.HandleFunc("GET /user", getUserHandler)
 
 	fmt.Println("Server is running at port 5000")
 	err := http.ListenAndServe(":5000", mux)
@@ -56,8 +57,11 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintln(w, "Method not allowed")
 	// 	return
 	// }
+	fmt.Fprintln(w, "User created successfully!")
+}
 
-
-
-
+func getUserHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+users, _:=	json.Marshal(user)
+w.Write(users)
 }
