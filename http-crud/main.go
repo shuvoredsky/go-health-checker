@@ -13,7 +13,7 @@ type User struct{
 	Email string `json:"email"`
 }
 
-	var user = []User{
+	var users = []Users{
 		{
 			Id: 1,
 			Name: "Shuvo Chakrabrati",
@@ -67,6 +67,13 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.FPrintln(w, "Error decoding user", err)
 		return
 	}
+
+	fmt.Println(newUser)
+	newUser.Id = len(users) + 1
+	users = append(users, newUser)
+
+	w.WriteHeader(http.StatusCreated)
+
 }
 
 func getUserHandler(w http.ResponseWriter, r *http.Request) {
