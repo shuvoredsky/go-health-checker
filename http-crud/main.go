@@ -5,6 +5,28 @@ import (
 	"net/http"
 )
 
+type User struct{
+	Id int
+	Name string
+	Age int
+	Email string
+}
+
+	var user = []User{
+		{
+			id: 1,
+			name: "Shuvo Chakrabrati",
+			age: 24,
+			email: "shuvo@gmail.com"
+		},
+		{
+			id: 2,
+			name: "Habib Ullah",
+			age: 24,
+			email: "habib@gmail.com"
+		}
+	}
+
 func main() {
 	mux := http.NewServeMux()
 
