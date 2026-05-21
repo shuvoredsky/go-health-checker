@@ -38,6 +38,8 @@ func main() {
     mux.HandleFunc("GET /user", getUserHandler)
     // mux.HandleFunc("GET /user/{id}", getSingleUserHandler)
 	mux.HandleFunc("GET /user/{id}", getSingleUserHandler)
+	mux.HandleFunc("PUT /user/{id}", updateUserHandler)
+	mux.HandleFunc("DELETE /user/{id}", deleteUserHandler)
 
     fmt.Println("Server is running at port 5000")
     err := http.ListenAndServe(":5000", mux)
@@ -98,4 +100,35 @@ func getSingleUserHandler(w http.ResponseWriter, r *http.Request) {
 
     w.WriteHeader(http.StatusNotFound)
     fmt.Fprintln(w, "user not found")
+}
+
+func updateUserHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(idParam)
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        fmt.Fprintln(w, "invalid user id")
+        return
+    }
+
+	var updateUser User
+
+	    err = json.NewDecoder(r.Body).Decode(&updateUser)  // ← err capture করো
+    if err != nil {
+        w.WriteHeader(http.StatusBadRequest)
+        fmt.Fprintln(w, "Error decoding user", err)  // ← lowercase p
+        return
+    }
+	for _, user := range users {  // ← uer → user
+        if user.Id == id {
+           updateUser.Id = id
+		   users[idx] = updateUser
+
+		   w.Header().Set("Content-Type", "application/json")
+		   json.NewEncoder(w).Encode(updateUser) 
+			return
+        }
+    }
+
+	w.WriteHeader(http.StatusNotFound)
+	fmt.Fprintln(w, "user not found")
 }
